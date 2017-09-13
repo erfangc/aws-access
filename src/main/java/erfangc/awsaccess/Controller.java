@@ -23,6 +23,11 @@ public class Controller {
         this.amazonS3 = amazonS3;
     }
 
+    @GetMapping("/")
+    public String root() {
+        return "Hello Chris!";
+    }
+
     @GetMapping("s3")
     public String get(@RequestParam(defaultValue = "20172466E2-cloudformation.yaml") String key) throws IOException {
         GetObjectRequest req = new GetObjectRequest("cf-templates-19t957lyn96vi-us-east-1", key);
