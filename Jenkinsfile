@@ -3,7 +3,16 @@ pipeline {
   stages {
     stage('Run Maven Package') {
       steps {
-        sh 'mvn clean package'
+        parallel(
+          "Run Maven Package": {
+            sh 'mvn clean package'
+            
+          },
+          "No Reason": {
+            listAWSAccounts()
+            
+          }
+        )
       }
     }
     stage('Upload to S3') {
