@@ -1,14 +1,14 @@
 pipeline {
   agent any
   stages {
-    stage('Run Maven Package') {
+    stage('Build') {
       steps {
         sh 'mvn clean package'
       }
     }
-    stage('Post') {
+    stage('Deploy') {
       steps {
-        awsIdentity()
+        sh 'eb deploy --staged'
       }
     }
   }
