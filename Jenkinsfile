@@ -3,7 +3,21 @@ pipeline {
   stages {
     stage('Say Hello') {
       steps {
-        echo 'Hello World!'
+        parallel(
+          "Say Hello": {
+            echo 'Hello World!'
+            
+          },
+          "Sleep": {
+            sleep 5
+            
+          }
+        )
+      }
+    }
+    stage('') {
+      steps {
+        sh 'mvn clean package -DskipTests=true'
       }
     }
   }
