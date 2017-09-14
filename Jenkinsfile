@@ -8,7 +8,7 @@ pipeline {
     }
     stage('Deploy') {
       steps {
-        sh 'eb deploy --staged'
+        sh '/usr/local/bin/eb deploy --staged'
       }
     }
   }
