@@ -1,23 +1,23 @@
 pipeline {
   agent any
   stages {
-    stage('Say Hello') {
+    stage('Pre-Build') {
       steps {
         parallel(
-          "Say Hello": {
-            echo 'Hello World!'
+          "Pre-Build": {
+            echo 'Hello I am about to Build Something!'
             
           },
-          "Sleep": {
-            sleep 5
+          "Approve": {
+            input(message: 'Please Approve!', id: 'approve-run')
             
           }
         )
       }
     }
-    stage('Run Maven') {
+    stage('Run Maven Package') {
       steps {
-        sh 'mvn clean package -DskipTests=true'
+        sh 'mvn clean package --DskipTests=true'
       }
     }
   }
