@@ -3,21 +3,12 @@ pipeline {
   stages {
     stage('Run Maven Package') {
       steps {
-        parallel(
-          "Run Maven Package": {
-            sh 'mvn clean package'
-            
-          },
-          "No Reason": {
-            listAWSAccounts()
-            
-          }
-        )
+        sh 'mvn clean package'
       }
     }
-    stage('Upload to S3') {
+    stage('Post') {
       steps {
-        s3Upload(file: 'target/aws-access-0.0.1-SNAPSHOT.jar', bucket: 'cf-templates-19t957lyn96vi-us-east-1', path: '/')
+        awsIdentity()
       }
     }
   }
