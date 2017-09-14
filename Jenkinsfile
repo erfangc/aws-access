@@ -6,10 +6,9 @@ pipeline {
         sh 'mvn clean package'
       }
     }
-    stage('Deploy') {
+    stage('Upload to S3') {
       steps {
-        sh '/usr/local/bin/eb init aws-access --region us-east-1 --platform java8'
-        sh '/usr/local/bin/eb deploy --staged'
+        s3Upload(file: 'target/aws-access.jar', bucket: 'arwm-calc-codebase-299541157397', path: 'aws-access')
       }
     }
   }
