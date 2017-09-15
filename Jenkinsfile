@@ -1,5 +1,7 @@
 #! groovy
 node {
+    checkout scm
+
     def pom = readMavenPom file: 'pom.xml'
     // aws accountID
     codeBucket = "arwm-calc-codebase-299541157397"
