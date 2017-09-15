@@ -23,6 +23,7 @@ node {
 aws elasticbeanstalk create-application-version \
     --application-name aws-access \
     --version-label ${pom.version} \
+    --region us-east-1 \
     --source-bundle S3Bucket='arwm-calc-codebase-299541157397',S3Key='${uberJar}'
 """
     }
