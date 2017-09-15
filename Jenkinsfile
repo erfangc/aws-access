@@ -14,7 +14,16 @@ node {
     }
     stage('Upload to S3') {
         def pom = readMavenPom file: 'pom.xml'
-        echo "${pom.version}"
-        s3Upload(file: 'target/aws-access.jar', bucket: 'arwm-calc-codebase-299541157397', path: 'aws-access.jar')
+        uberJar = "${pom.artifactId}-${pom.version}.jar"
+        s3Upload(file: "target/${uberJar}", bucket: 'arwm-calc-codebase-299541157397', path: "${uberJar}")
+        /*
+        update the uberJar as a new version in ElasticBeanstalk
+         */
+        sh """
+aws elasticbeanstalk create-application-version \
+    --application-name aws-access \
+    --version-label ${pom.version} \
+    --source-bundle S3Bucket='arwm-calc-codebase-299541157397',S3Key='${uberJar}'
+"""
     }
 }
