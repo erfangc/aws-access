@@ -25,7 +25,7 @@ public class Controller {
 
     @GetMapping("/")
     public String root() {
-        return "Hello Jenkins!";
+        return "Hello Erfang!";
     }
 
     @GetMapping("s3")
