@@ -1,5 +1,8 @@
 #! groovy
 node {
+    def pom = readMavenPom file: 'pom.xml'
+    // aws accountID
+    codeBucket = "arwm-calc-codebase-299541157397"
     stage('Build') {
         parallel(
                 "Build": {
@@ -13,9 +16,8 @@ node {
         )
     }
     stage('Upload to S3') {
-        def pom = readMavenPom file: 'pom.xml'
         uberJar = "${pom.artifactId}-${pom.version}.jar"
-        s3Upload(file: "target/${uberJar}", bucket: 'arwm-calc-codebase-299541157397', path: "${uberJar}")
+        s3Upload(file: "target/${uberJar}", bucket: codeBucket, path: uberJar)
 
         /*
         update the uberJar as a new version in ElasticBeanstalk
@@ -36,10 +38,17 @@ aws elasticbeanstalk create-application-version \
     --application-name ${pom.artifactId} \
     --version-label ${pom.version} \
     --region us-east-1 \
-    --source-bundle S3Bucket='arwm-calc-codebase-299541157397',S3Key='${uberJar}'
+    --source-bundle S3Bucket='${codeBucket}',S3Key='${uberJar}'
 """
     }
     stage('Deploy') {
         echo "Deploying to DEV ..."
+        sh """
+aws elasticbeanstalk update-environment \
+    --application-name ${pom.artifactId} \
+    --version-label ${pom.version} \
+    --environment-name ${pom.artifactId}-DEV \
+    --region us-east-1
+"""
     }
 }
