@@ -16,7 +16,6 @@ node {
         )
     }
     stage('Upload to S3') {
-        sh "ls -lh target/"
         uberJar = "${pom.artifactId}-${pom.version}.jar"
         s3Upload(file: "target/${uberJar}", bucket: codeBucket, path: uberJar)
 
